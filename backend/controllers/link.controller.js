@@ -1,17 +1,45 @@
 const Link = require('../models/links.model.js');
-
+const nan= require('nanoid');
+const dotenv = require('dotenv');
+dotenv.config();
 const CreateLink = async (req, res) => {
-    const { url, trmd_link, user_id } = req.body;
-    if (!url || !trmd_link || !user_id) {
-        return res.status(400).json({ message: "All fields are required" });
+    const { url , user_id , name } = req.body;
+    if (!url) {
+        return res.status(400).json({ message: "URL is required" });
     }
     try {
-        const newLink = await Link.create({ url, trmd_link, user_id });
+        let existence = true;
+        let slug;
+        while (existence) {
+            slug = nan.nanoid(6);
+            const existingLink = await Link.findOne({ where: { slug } });
+            if (!existingLink) {
+                existence = false;
+            }
+        }
+        const trmd_link = `${process.env.BASE_URL}/${name}/${slug}`; 
+        const newLink = await Link.create({ url, trmd_link,slug: slug, user_id: req.user.id });
         return res.status(200).json({ message: "Link created successfully", link: newLink });
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });
     }
 }
+
+const findLink = async (req, res) => {
+    const { user_id } = req.params;
+    if (!user_id) {
+        return res.status(400).json({ message: "User ID is required" });
+    }
+    try {
+        const link = await Link.findOne({ where: { user_id } });
+        if (!link) {
+            return res.status(404).json({ message: "Link not found" });
+        }
+        return res.status(200).json({ link });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
 
 const DeleteLink = async (req, res) => {
     const { trmd_link } = req.params;
@@ -29,4 +57,4 @@ const DeleteLink = async (req, res) => {
     }
 }
 
-module.exports = {  CreateLink, DeleteLink };
+module.exports = {  CreateLink, DeleteLink, findLink };

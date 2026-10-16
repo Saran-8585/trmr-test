@@ -17,6 +17,13 @@ const Link = sequelize.define('link', {
         allowNull: false,
         unique: true
     },
+
+    slug: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true
+    },
+
     user_id: {
         type: DataTypes.INTEGER,
         allowNull: false
