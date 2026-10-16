@@ -1,6 +1,6 @@
-const Link = require('../models/links.model');
+const Link = require('../models/links.model.js');
 
-module.exports = CreateLink = async (req, res) => {
+const CreateLink = async (req, res) => {
     const { url, trmd_link, user_id } = req.body;
     if (!url || !trmd_link || !user_id) {
         return res.status(400).json({ message: "All fields are required" });
@@ -13,7 +13,7 @@ module.exports = CreateLink = async (req, res) => {
     }
 }
 
-module.exports = DeleteLink = async (req, res) => {
+const DeleteLink = async (req, res) => {
     const { trmd_link } = req.params;
     if (!trmd_link) {
         return res.status(400).json({ message: "Trmd link is required" });
@@ -28,3 +28,6 @@ module.exports = DeleteLink = async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 }
+
+module.exports = CreateLink;
+module.exports = DeleteLink;

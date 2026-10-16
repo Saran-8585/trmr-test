@@ -1,4 +1,4 @@
-const seq= require("../db");
+const seq= require("../db.js");
 const { DataTypes } = require("sequelize");
 const User = seq.define("user", {
     id: {
