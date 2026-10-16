@@ -29,5 +29,4 @@ const DeleteLink = async (req, res) => {
     }
 }
 
-module.exports = CreateLink;
-module.exports = DeleteLink;
+module.exports = {  CreateLink, DeleteLink };

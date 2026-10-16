@@ -1,6 +1,7 @@
-const CreateLink = require('../controllers/link.controller.js');
-const DeleteLink = require('../controllers/link.controller.js');
+const {CreateLink , DeleteLink} = require('../controllers/link.controller.js');
+
 const express = require('express');
+
 
 const Link = express.Router();
 

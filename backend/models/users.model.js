@@ -12,7 +12,7 @@ const User = seq.define("user", {
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: true
     },
     password: {

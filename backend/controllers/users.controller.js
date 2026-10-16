@@ -1,7 +1,10 @@
 const Users = require ("../models/users.model.js")
 const bcrypt = require("bcryptjs")
 
+
 const CreateUser = async (req,res) => {
+    //return res.json("create user endpoint hit")
+    console.log("checkpoint 1")
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         return res.status(400).json({message: "All fields are required"});
@@ -16,6 +19,7 @@ const CreateUser = async (req,res) => {
 }
 
 const CheckUser = async (req,res) => {
+    // return res.json("check user endpoint hit")
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({message: "All fields are required"});
@@ -36,6 +40,7 @@ const CheckUser = async (req,res) => {
 }
 
 const DeleteUser = async (req,res) => {
+    // return res.json("delete user endpoint hit")
     const { email } = req.params;
     if (!email) {
         return res.status(400).json({message: "Email is required"});
@@ -51,6 +56,5 @@ const DeleteUser = async (req,res) => {
     }
 }
 
-module.exports = DeleteUser;
-module.exports = CreateUser;
-module.exports = CheckUser;
+
+module.exports ={CreateUser, CheckUser, DeleteUser}
