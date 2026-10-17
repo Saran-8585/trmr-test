@@ -1,24 +1,27 @@
 const Link = require('../models/links.model.js');
+const bcrypt = require('bcryptjs');
 const nan= require('nanoid');
 const dotenv = require('dotenv');
 dotenv.config();
 const CreateLink = async (req, res) => {
-    const { url , user_id , name } = req.body;
+    const { url , user_id } = req.body;
     if (!url) {
         return res.status(400).json({ message: "URL is required" });
     }
     try {
         let existence = true;
-        let slug;
+        let slug= nan.nanoid(6);
         while (existence) {
-            slug = nan.nanoid(6);
             const existingLink = await Link.findOne({ where: { slug } });
+            if (existingLink) {
+                slug = bcrypt.hashSync(slug, 10).replace(/\//g, '').substring(0, 6);
+            }
             if (!existingLink) {
                 existence = false;
             }
         }
-        const trmd_link = `${process.env.BASE_URL}/${name}/${slug}`; 
-        const newLink = await Link.create({ url, trmd_link,slug: slug, user_id: req.user.id });
+        const trmd_link = `${process.env.BASE_URL}/${slug}`; 
+        const newLink = await Link.create({ url, trmd_link,slug: slug, user_id: user_id });
         return res.status(200).json({ message: "Link created successfully", link: newLink });
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });
